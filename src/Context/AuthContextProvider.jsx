@@ -77,7 +77,9 @@ const AuthContextProvider = ({ children }) => {
         githubSignIn,
         loading,
         setLoading,
-        user
+        user,
+        setUser
+
     }
 
     return (

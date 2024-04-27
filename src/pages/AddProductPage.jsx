@@ -4,32 +4,43 @@ import toast from "react-hot-toast";
 import Spinner from "../components/Spinner.jsx";
 import { useLoaderData } from "react-router-dom";
 import useAuth from "../hooks/useAuth.jsx";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 // import baseURL from '../utilitis/url.js'
 const AddProductPage = ({ update }) => {
   const { user } = useAuth() || {};
+
+
   const handleAddProduct = (e) => {
     e.preventDefault();
 
-    const name = e.target.name.value;
-    const price = e.target.price.value;
-    const image = e.target.image.value;
-    const type = e.target.type.value;
+    const form = e.target;
+    const name = form.name.value;
+    const price = form.price.value;
+    const image = form.image.value;
+    const type = form.type.value;
+    const brand = form.brand.value;
+    const rating = form.rating.value;
     const email = user.email;
 
-    // console.log(name, price, image, type)
+    
 
-    const info = { name, price, image, type, email };
+    const info = { name, price, image, type, email, brand, rating };
 
-    fetch("http://localhost:5000/addProduct", {
-      method: "POST",
-      headers: { "Content-type": "application/json" },
-      body:JSON.stringify(info)
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data?.insertedId) {
-        alert("bhai data insert hoice")
+    console.log(info);
+
+    axios.post(`http://localhost:3000/addProducts`, info)
+      .then(response => {
+        const data = response.data;
+        console.log(data)
+        if (data?._id) {
+          Swal.fire({
+            title: "Success!",
+            text: "Coffee Added Successfully",
+            icon: "success",
+          });
+          form.reset()
       }
     })
    

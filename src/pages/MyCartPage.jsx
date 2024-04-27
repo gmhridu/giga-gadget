@@ -4,26 +4,36 @@ import { useEffect, useState } from "react";
 import { baseURL } from "../utilitis/Url";
 import toast from "react-hot-toast";
 import Spinner from "../components/Spinner";
+import axios from "axios";
 
 const MyCartPage = () => {
   const { user } = useAuth() || {};
   const [item, setItem] = useState([]);
-  // console.log(user);
+  console.log(user);
+ 
   useEffect(() => {
-    fetch(`http://localhost:5000/myProduct/${user?.email}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setItem(data);
-      });
-  }, [user]);
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3000/myproducts/${user?.email}`)
+        const itemsData = res.data
+        console.log(itemsData)
+        setItem(itemsData);
+      }
+      catch (error) {
+        console.log(error)
+      }
+    }
+    if (user) {
+      fetchData()
+    }
+  },[user])
 
   return (
     <div className="gadgetContainer pt-10">
-      
       {
         item?.map(p => (
           <div>
-            <h1>Hello</h1>
+            <h1>Name: {p.name}</h1>
           </div>
         ))
       }
